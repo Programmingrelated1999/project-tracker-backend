@@ -1,2 +1,2 @@
-web: node dev
+web: node index.js
 git push heroku main.
