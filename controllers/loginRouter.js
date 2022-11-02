@@ -8,7 +8,7 @@ const loginRouter = require('express').Router()
 //import Users model
 const Users = require('../models/users')
 
-loginRouter.get("/", async(request, reponse) => {
+loginRouter.get("/", async(request, response) => {
   response.json({error: "hello"});
 })
 
