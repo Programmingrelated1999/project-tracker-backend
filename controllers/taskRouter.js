@@ -80,6 +80,7 @@ taskRouter.post("/", async (request, response) => {
         //save the task. concat the task to project tasks and save the project.
         const savedTask = await task.save();
         project.tasks = project.tasks.concat(savedTask._id);
+        project.status = false;
         await project.save();
 
         //save the project to the invited user's project invites list.

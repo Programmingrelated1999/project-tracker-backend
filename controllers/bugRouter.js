@@ -72,6 +72,7 @@ bugRouter.post("/", async (request, response) => {
     
         const savedBug = await bug.save();
         project.bugs = project.bugs.concat(savedBug._id);
+        project.status = false;
         await project.save();
 
         //save the project to the invited user's project invites list.
