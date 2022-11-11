@@ -34,8 +34,8 @@ projectRouter.get("/:id", async (request, response) => {
 
   const projectToReturn = await Projects.findById(request.params.id).populate('creator', {name: 1, username: 1})
   .populate('admins', {name: 1, username: 1}).populate('developers', {name: 1, username: 1}).populate('clients', {name: 1, username: 1})
-  .populate('invites', {name: 1, username: 1}).populate('tasks', {name: 1, description: 1, createdDate: 1, assigned: 1, status: 1})
-  .populate('bugs', {name: 1, description: 1, createdDate: 1, assigned: 1, status: 1});
+  .populate('invites', {name: 1, username: 1}).populate('tasks', {name: 1, description: 1, createdDate: 1, endDate: 1, assigned: 1, status: 1})
+  .populate('bugs', {name: 1, description: 1, createdDate: 1, endDate: 1, assigned: 1, status: 1});
 
   response.json(projectToReturn);
 });
