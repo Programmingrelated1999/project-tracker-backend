@@ -60,6 +60,7 @@ projectRouter.post("/", async (request, response) => {
     name: request.body.name,
     description: request.body.description,
     createdDate: new Date().toDateString(),
+    endDate: request.body.endDate,
     creator: creator.id,
   });
 

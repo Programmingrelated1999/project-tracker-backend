@@ -9,6 +9,13 @@ const Tasks = require("../models/tasks");
 const Projects = require("../models/projects");
 const Users = require("../models/users");
 
+const checkDueDate = (createdDate, endDate) => {
+    if(!endDate || createdDate < endDate){
+      return false;
+    }
+    return true;
+}
+
 //get token function
 const getTokenFrom = request => {
     const authorization = request.get('authorization')
@@ -114,7 +121,15 @@ taskRouter.put("/:id", async(request, response) => {
         //check the basics data of task to update, if there is any basic data from incoming request update.
         taskToUpdate.name = request.body.name? request.body.name : taskToUpdate.name;
         taskToUpdate.description = request.body.description? request.body.description : taskToUpdate.description;
-        taskToUpdate.endDate = request.body.endDate? request.body.endDate : taskToUpdate.endDate;
+
+        //End Date on the request body
+        if(request.body.endDate){
+            const isDuePastProject = checkDueDate(project.endDate, request.body.endDate);
+            if(!isDuePastProject){
+                response.status(404).json({error: "Task deadLine cannot be after project deadline"});
+            }
+            taskToUpdate.endDate = request.body.endDate;
+        }
 
         //if there are any assigned - linking data, update the assigned list in the task along with updating the tasks of the users to include the current task.
         if(request.body.assigned){
