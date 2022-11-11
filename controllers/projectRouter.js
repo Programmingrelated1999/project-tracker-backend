@@ -113,6 +113,7 @@ projectRouter.put("/:id", async(request, response) => {
     //update the basics of the project
     projectToUpdate.name = request.body.name? request.body.name: projectToUpdate.name;
     projectToUpdate.description = request.body.description? request.body.description: projectToUpdate.description;
+    projectToUpdate.status = request.body.status? request.body.status: projectToUpdate.status;
 
     //if there are any addInvites then add them to the invite list.
     if(request.body.addInvites){

@@ -113,7 +113,14 @@ bugRouter.put("/:id", async(request, response) => {
         //check the basics data of bug to update, if there is any basic data from incoming request update.
         bugToUpdate.name = request.body.name? request.body.name : bugToUpdate.name;
         bugToUpdate.description = request.body.description? request.body.description : bugToUpdate.description;
-        bugToUpdate.endDate = request.body.endDate? request.body.endDate : bugToUpdate.endDate;
+
+        if(request.body.endDate){
+            const isDuePastProject = checkDueDate(project.endDate, request.body.endDate);
+            if(!isDuePastProject){
+                response.status(404).json({error: "Bug deadLine cannot be after project deadline"});
+            }
+            bugToUpdate.endDate = request.body.endDate;
+        }
 
         //if there are any assigned - linking data, update the assigned list in the bug along with updating the bugs of the users to include the current bug.
         if(request.body.assigned){
@@ -156,6 +163,10 @@ bugRouter.put("/:id", async(request, response) => {
 
     bugToUpdate.status = request.body.status? request.body.status: bugToUpdate.status;
     const savedBug = await bugToUpdate.save();
+    if(savedBug.status === 'Progress' || savedBug.status === 'Created'){
+        project.status = false;
+        await project.save();
+    }
     response.json(savedBug);
 })
 
